@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% load static %}
+<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+
+<body>
+  {% block body %} 
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #000;
+            color: gold;
+            text-align: center;
+            padding: 20px;
+        }
+        .form-container {
+            width: 60%;
+            margin: 50px auto;
+            background-color: #222;
+            padding: 30px;
+            border-radius: 8px;
+        }
+        .form-container h2 {
+            text-align: center;
+            color: gold;
+        }
+        label {
+            font-weight: bold;
+            color: white;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid gold;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+        }
+        input[type="submit"] {
+            background-color: gold;
+            border: none;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+        }
+        input[type="submit"]:hover {
+            background-color: #FFD700;
+        }
+    </style>
+    <header>
+        <h1>Book a Consultation</h1>
+    </header>
+
+    <div class="form-container">
+        <h2>Choose Your Service and Time Slot</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Service Details (You can pre-fill these in a hidden field or pull from a database if needed) -->
+            <label for="service_name">Consultation Service</label>
+            <input type="text" name="service_name" value="Consultation Service" required readonly>
+            
+            <label for="service_description">Description</label>
+            <textarea name="service_description" rows="3" readonly>This is a detailed description of the consultation service.</textarea>
+            
+            <label for="service_fee">Fee</label>
+            <input type="text" name="service_fee" value="100.00" required readonly>
+            
+            <!-- User Information -->
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" required>
+            
+            <label for="email">Email</label>
+            <input type="email" name="email" required>
+            
+            <label for="message">Message </label>
+            <textarea name="message" rows="3"></textarea>
+
+            <label for="appointment_date">Choose Appointment Date:</label>
+            <input type="date" name="appointment_date" required min="{{ today|date:"Y-m-d" }}">
+
+            <!-- Time Slot Selection -->
+            <label for="time_slot">Choose Your Time Slot:</label>
+            <select name="time_slot" required>
+                {% for slot in time_slots %}
+                    <option value="{{ slot }}">{{ slot }}</option>
+                {% endfor %}
+            </select>
+            
+            <input type="submit" value="Book Appointment">
+        </form>
+    </div>
+
+
+    {% endblock %}
+</body>

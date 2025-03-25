@@ -1,0 +1,186 @@
+{% extends 'base.html' %} {% load static %}
+<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+<body>
+  {% block body %} 
+     <div class="main-body">
+    <!-- SECTION-2 STARTS HERE -->
+     <div class="second-section">
+          <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{% static 'images/building.png' %}" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'images/living images1.png' %}" class="d-block w-100" alt="living images1">
+              </div>
+              <div class="carousel-item">
+                <img src="{% static 'images/living room2.png' %}" class="d-block w-100" alt="living room2">
+              </div>
+            </div>
+          </div>
+      </div>
+
+    <!-- SECTION-2 ENDS HERE -->
+    <!-- SECTION-3 STARTS HERE -->
+    <div class="third-section">
+ 
+      <div class="row">
+        <div class="col">
+          <div class="search-bar">
+            <h1>Find Your Dream Property</h1>
+            <div class="filters">
+                <input type="text" id="location" placeholder="Enter location" class="filter">
+                    <select id="property-type" class="filter">
+                        <option value="">Property Type</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                    </select>
+                    <input type="number" id="min-price" placeholder="Min Price" class="filter" min="0">
+                    <input type="number" id="max-price" placeholder="Max Price" class="filter" min="0">
+                    <select id="bedrooms" class="filter">
+                        <option value="">Bedrooms</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                    <select id="bathrooms" class="filter">
+                        <option value="">Bathrooms</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                    </select>
+                </div>
+                <div class="search-actions">
+                    <button class="search-btn">Search</button>
+                    <button class="reset-btn" onclick="resetForm()">Reset</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        function resetForm() {
+            document.getElementById("location").value = '';
+            document.getElementById("property-type").value = '';
+            document.getElementById("min-price").value = '';
+            document.getElementById("max-price").value = '';
+            document.getElementById("bedrooms").value = '';
+            document.getElementById("bathrooms").value = '';
+        }
+      </script>
+
+      </div>
+    <!-- SECTION-3 ENDS HERE -->
+      <!-- Partision of Expertise Range and Service-->
+       <div class="container">
+      <div class="row">
+        <div class="col">
+          <img src="#" alt="Expertiseimage  / /SVG/rating.png">
+          <h4>20+ Years of Expertise</h4>
+          <p>With experience comes knowledge. And over the past two decades, we've amassed a wealth of both.</p>
+        </div>
+        <div class="col">
+          <img src="#" alt="Expertiseimage  / /SVG/building.png">
+          <h4>Wide Range of Properties</h4>
+          <p>Our Expertise extends to the Residential,Commercial and Retail sector.</p>
+        </div>
+        <div class="col">
+          <img src="#" alt="Expertiseimage  / /SVG/reputation.png">
+          <h4>Professional Services</h4>
+          <p>Whether you are choosing to rent, buy or sell, we guarantee you an end-to-end professional experience.</p>
+        </div>
+      </div>
+    </div>
+    <!-- SECTION-4 STARTS HERE -->
+    <div class="fourth-section">
+      <div class="container">
+
+          <h2>Search by Area</h2>
+          <!-- Cards Starts Here -->
+          <div class="card" style="width: 19rem;">
+            <img src="{% static '/images/Commercial.png' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Borivali</h5>
+              <p class="card-text">50+ Properties</p>
+              <a href="#" class="btn btn-primary">Know More</a>
+            </div>
+
+        </div>
+      </div>
+      <!-- Cards Ends Here -->
+    </div>
+    <!-- SECTION-4 ENDS HERE -->
+    <!-- SECTION-5 STARTS HERE -->
+    <div class="fifth-section">
+        <div class="container">
+          <div class="about">
+
+              <h1>About US</h1>
+              <hr>
+
+          </div>
+        </div>
+    </div>
+    <!-- SECTION-5 ENDS HERE -->
+    <!-- SECTION-6 STARTS HERE -->
+    <div class="sixth-section">
+        <div class="container">
+          <div class="about">
+
+              <h1>Leading Project</h1>
+              <hr>
+                <div class="row">
+                  <div class="col">
+                    <img src="{% static '/images/residential.png' %}" alt="Leading Projects">
+                  </div>
+                  <div class="col">
+                    <h1>Roswalt Zaiden</h1>
+                    <p>Luxury Apartments brimming with life, amazing communal amenities, and spacious world-class designs. It promises a future of prosperity and a spectacular quality of life.  </p>
+                    <ul>
+                      <li>
+                        <strong>Status :</strong> Ongoing
+                      </li>
+                      <li>
+                          <strong>MahaRERA Reg No. :</strong> P51800047680
+                      </li>
+                      <li>
+                      <strong>Possession :</strong> December 2028
+                      </li>
+                      <li>
+                      <strong>Configuration :</strong> 1, 2, 3 BHK
+                      </li>
+                      <li>
+                        <strong>Area :</strong> 22,037 Sq Mt
+                      </li>
+                      <li>
+                        <strong>Location :</strong> Jogeshwari West
+                      </li>
+                      <a href="#" class="btn btn-primary">Know More</a>
+                    </ul>
+                    
+                  </div>
+              </div>
+
+          </div>
+        </div>
+    </div>
+    <!-- SECTION-6 ENDS HERE -->
+    <!-- SECTION-7 STARTS HERE -->
+    <div class="seventh-section">
+        
+    </div>
+    <!-- SECTION-7 ENDS HERE -->
+    <!-- SECTION-8 STARTS HERE -->
+    <div class="eigth-section">
+        
+    </div>
+    <!-- SECTION-8 ENDS HERE -->
+    <!-- SECTION-9 STARTS HERE -->
+    <div class="ninth-section">
+        
+    </div>
+    <!-- SECTION-9 ENDS HERE -->
+      
+  {% endblock %}
+</body>

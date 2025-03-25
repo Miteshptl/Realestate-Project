@@ -1,0 +1,127 @@
+{% extends 'base.html' %} {% load static %}
+<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+<body>
+  {% block body %} 
+
+    <!-- SECTION-1 STARTS HERE -->
+    <div class="r-1">
+        <section>
+            <img src="..." alt="...">
+            <h1>Discover Our Exciting Upcoming Projects – Where Innovation Meets Opportunity.</h1>
+        </section>
+    </div>
+    <!-- SECTION-1 ENDS HERE -->
+     <!-- SECTION-2 STARTS HERE -->
+    <div class="r-2">
+        <div class="row">
+          <div class="col">
+            <div class="search-bar">
+                <div class="find-love">
+              <h1>Find a home you'll <span>love</span></h1>
+              </div>
+              <div class="filters">
+                  <input type="text" id="location" placeholder="Enter location" class="filter">
+                      <select id="property-type" class="filter">
+                          <option value="">Property Type</option>
+                          <option value="house">House</option>
+                          <option value="apartment">Apartment</option>
+                          <option value="condo">Condo</option>
+                          <option value="commercial">Commercial</option>
+                      </select>
+                      <input type="number" id="min-price" placeholder="Min Price" class="filter" min="0">
+                      <input type="number" id="max-price" placeholder="Max Price" class="filter" min="0">
+                      <select id="bedrooms" class="filter">
+                          <option value="">Bedrooms</option>
+                          <option value="1">1+</option>
+                          <option value="2">2+</option>
+                          <option value="3">3+</option>
+                          <option value="4">4+</option>
+                      </select>
+                      <select id="bathrooms" class="filter">
+                          <option value="">Bathrooms</option>
+                          <option value="1">1+</option>
+                          <option value="2">2+</option>
+                          <option value="3">3+</option>
+                      </select>
+                  </div>
+                  <div class="search-actions">
+                      <button class="search-btn">Search</button>
+                      <button class="reset-btn" onclick="resetForm()">Reset</button>
+                  </div>
+              </div>
+          </div>
+  
+      <script>
+          function resetForm() {
+              document.getElementById("location").value = '';
+              document.getElementById("property-type").value = '';
+              document.getElementById("min-price").value = '';
+              document.getElementById("max-price").value = '';
+              document.getElementById("bedrooms").value = '';
+              document.getElementById("bathrooms").value = '';
+          }
+        </script>
+    </div>
+    <!-- SECTION-2 ENDS HERE -->
+     <!-- SECTION-3 STARTS HERE -->
+    
+    <div class="r-3">
+        <section>
+            <div class="row">
+                {% for project in projects %}
+                    <div class="col-md-2">
+                        <div class="card" style="width: 18rem;">
+                                <img src="{% static 'images/default_image.png' %}" class="card-img-top" alt="Default Image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ project.name_of_property }}</h5>
+                                <p class="card-text">Area: {{ project.area_of_property_located }}</p>
+                                <a href="#" class="btn btn-primary">Know More</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+    <!-- SECTION-3 ENDS HERE -->
+     <!-- SECTION-4 STARTS HERE -->
+    <div class="r-4">
+        <section>
+        
+        </section>
+    </div>
+    <!-- SECTION-4 ENDS HERE -->
+     <!-- SECTION-5 STARTS HERE -->
+    <div class="r-5">
+        <section>
+            
+        </section>
+    </div>
+    <!-- SECTION-5 ENDS HERE -->
+     <!-- SECTION-6 STARTS HERE -->
+    <div class="r-6">
+        
+    </div>
+    <!-- SECTION-6 ENDS HERE -->
+     <!-- SECTION-7 STARTS HERE -->
+    <div class="r-7">
+        
+    </div>
+    <!-- SECTION-7 ENDS HERE -->
+     <!-- SECTION-8 STARTS HERE -->
+    <div class="r-8">
+        
+    </div>
+    <!-- SECTION-8 ENDS HERE -->
+     <!-- SECTION-9 STARTS HERE -->
+    <div class="r-9">
+        
+    </div>
+    <!-- SECTION-9 ENDS HERE -->
+     <!-- SECTION-10 STARTS HERE -->
+    <div class="r-10">
+        
+    </div>
+    <!-- SECTION-10 ENDS HERE -->
+    {% endblock %}
+  </body>

@@ -1,0 +1,58 @@
+{% extends 'base.html' %} {% load static %}
+<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+
+<body>
+  {% block body %} 
+<div class="qwert">
+    <div class="container">
+    <h1 class="display-4">{{ upcoming.name_of_project }}</h1>
+    <p class="lead">Type: {{ upcoming.type_of_project }}</p>
+    
+    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for image in upcoming.images.all %}
+                <button type="button" data-bs-target="#carouselExample" data-bs-slide-to="{{ forloop.counter0 }}" class=" {% if forloop.first %} active {% endif %}" aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for image in upcoming.images.all %}
+                <div class="carousel-item {% if forloop.first %} active {% endif %} ">
+                    <img src="{{ image.image.url }}" class="d-block w-50 mx-auto d-block" alt="Image of {{ upcoming.name_of_project }}">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <div class="mt-4">
+        <h3>Description:</h3>
+        <p>{{ upcoming.description }}</p>
+
+        <h3>Amenities:</h3>
+        <p>{{ upcoming.amenities }}</p>
+
+        <h3>Floor Plan:</h3>
+        <p>{{ upcoming.floor_plan }}</p>
+
+        <!-- <h3>Brochure:</h3> -->
+        <!-- <p>{{ upcoming.brochure }}</p> -->
+
+        <h3>Brochure:</h3>
+        <a href="{{ upcoming.brochure.url }}" target="_blank">
+        download</a>
+
+</div>
+
+
+  <a href="{% url 'upcoming' %}">Back to Project List</a>
+  </div>
+</div>
+  {% endblock %}
+</body>

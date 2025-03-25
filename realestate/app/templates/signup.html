@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block title %}FlipKart|SignUp{% endblock %} 
+{% block body %}
+
+<body>
+
+<div class="signup-page">
+    <div class="signup-form">
+        <h2>Create Your Account</h2>
+        {% if errmsg %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error!</strong> {{errmsg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+        <form action="{% url 'signin' %}" method="POST">
+            {% csrf_token %}
+            <!-- Username Field -->
+            <div class="form-group">
+                <label for="text">Username</label>
+                <input type="text" class="form-control" id="text" name="uname" placeholder="Enter Username" required>
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+
+        <div class="signup-footer">
+            <p>Already have an account? <a href="{% url 'signin' %}">Login here</a></p>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+</body>

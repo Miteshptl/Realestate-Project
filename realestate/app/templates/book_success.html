@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% load static %}
+<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+
+<body>
+    {% block body %} 
+
+    <h1>Thank You for Booking</h1>
+
+
+<div class="success-container">
+    <h2>Your appointment has been successfully booked!</h2>
+    <p>We have received your booking for the consultation service. You will receive a confirmation email shortly with all the details of your appointment.</p>
+    
+    <p><strong>Appointment Details:</strong></p>
+    <ul style="list-style: none; padding-left: 0;">
+        <li><strong>Service:</strong> Consultation Service</li>
+        <li><strong>Date & Time:</strong> {{ appointment.date|date:"F j, Y, g:i a" }}</li>
+        <li><strong>Fee:</strong> ${{ appointment.service_fee }}</li>
+    </ul>
+
+    <p>If you need to reschedule or have any questions, feel free to <a href="mailto:support@yourwebsite.com">contact us</a>.</p>
+
+    <a href="{% url 'appointments' %}" class="btn">View Your Appointments</a>
+</div>
+
+{% endblock %}
+</body>
