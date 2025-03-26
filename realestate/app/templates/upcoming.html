@@ -13,56 +13,23 @@
     <!-- SECTION-1 ENDS HERE -->
      <!-- SECTION-2 STARTS HERE -->
     <div class="up-2">
-        <div class="row">
-          <div class="col">
-            <div class="search-bar">
-              <h1>Search Our Upcoming Project</h1>
-              <div class="filters">
-                  <input type="text" id="location" placeholder="Enter location" class="filter">
-                      <select id="property-type" class="filter">
-                          <option value="">Property Type</option>
-                          <option value="house">House</option>
-                          <option value="apartment">Apartment</option>
-                          <option value="condo">Condo</option>
-                          <option value="commercial">Commercial</option>
-                      </select>
-                      <input type="number" id="min-price" placeholder="Min Price" class="filter" min="0">
-                      <input type="number" id="max-price" placeholder="Max Price" class="filter" min="0">
-                      <select id="bedrooms" class="filter">
-                          <option value="">Bedrooms</option>
-                          <option value="1">1+</option>
-                          <option value="2">2+</option>
-                          <option value="3">3+</option>
-                          <option value="4">4+</option>
-                      </select>
-                      <select id="bathrooms" class="filter">
-                          <option value="">Bathrooms</option>
-                          <option value="1">1+</option>
-                          <option value="2">2+</option>
-                          <option value="3">3+</option>
-                      </select>
-                  </div>
-                  <div class="search-actions">
-                      <button class="search-btn">Search</button>
-                      <button class="reset-btn" onclick="resetForm()">Reset</button>
-                  </div>
-              </div>
+        <div class="container">
+            <h1>Find Your Dream Home</h1>
+            
+          <div>
+          <section>
+          <form class="d-flex search-form  mx-3" method="get" action="/searchproduct/">
+            <input type="search" name="q" class="form-control search-input mx-2" placeholder="Search for Dream Home">
+            <button class="btn btn-outline-primary mx-2" type="submit">Search</button>
+          </form>
+          </section>
           </div>
-  
-      <script>
-          function resetForm() {
-              document.getElementById("location").value = '';
-              document.getElementById("property-type").value = '';
-              document.getElementById("min-price").value = '';
-              document.getElementById("max-price").value = '';
-              document.getElementById("bedrooms").value = '';
-              document.getElementById("bathrooms").value = '';
-          }
-        </script>
+          </div>
     </div>
     <!-- SECTION-2 ENDS HERE -->
      <!-- SECTION-3 STARTS HERE -->
      <div class="r-3">
+        <div class="container">
         <section>
             <div class="row">
                     <div class="col-md-2">
@@ -79,6 +46,7 @@
                     </div>
             </div>
         </section>
+        </div>
     </div>
     <!-- SECTION-3 ENDS HERE -->
      <!-- SECTION-4 STARTS HERE -->
