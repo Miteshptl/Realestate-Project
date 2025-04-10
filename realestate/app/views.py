@@ -62,10 +62,14 @@ def generate_time_slots():
 
 
 
-@login_required
+
+from django.shortcuts import render
+from datetime import datetime
+from .models import Appointment  # Assuming you have an Appointment model
+
 def book_appointment(req):
     time_slots = generate_time_slots()
-    today=datetime.today()
+    today = datetime.today()
 
     if req.method == 'POST':
         service_name = req.POST.get('service_name')
@@ -74,8 +78,19 @@ def book_appointment(req):
         appointment_date = req.POST.get('appointment_date')
         selected_time_slot = req.POST.get('time_slot')
 
-        appointment_datetime = datetime.strptime(f"{appointment_date} {selected_time_slot}", '%Y-%m-%d %I:%M %p')
-
+        try:
+            appointment_datetime = datetime.strptime(
+                f"{appointment_date} {selected_time_slot}", 
+                '%Y-%m-%d %I:%M %p'
+            )
+        except ValueError:
+            # Invalid date/time format
+            return render(req, 'book_appointment.html', {
+                'time_slots': time_slots,
+                'today': today,
+                'error': "Invalid date or time format. Please try again.",
+                'form_data': req.POST
+            })
 
         appointment = Appointment(
             user=req.user,
@@ -88,21 +103,226 @@ def book_appointment(req):
             message=req.POST.get('message', ''),
         )
         appointment.save()
-        return render(req ,'book_success.html')
+        req.session['appointment_id'] = appointment.id
+        return render(req, 'book_success.html')
 
     return render(req, 'book_appointment.html', {
         'time_slots': time_slots,
-        'today': today,
+        'today': today
     })
 
+
 def success(request):
-    appointment = Appointment.objects.filter(user=request.user).last()
+    appointment_id = request.session.get('appointment_id')
+    appointment = None
+    if appointment_id:
+        appointment = Appointment.objects.filter(id=appointment_id).first()
+
     return render(request, 'book_uccess.html', {'appointment': appointment})
 
-@login_required
+
 def user_appointments(req):
     appointments = Appointment.objects.filter(user=req.user) 
     return render(req, 'Appointments.html', {'appointments': appointments})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def commercial(req):
+    if req.method=="GET":
+        allproducts=Upcoming.objects.filter(type_of_project__exact="Commercial")
+        print(allproducts)
+        context={'allproducts':allproducts}
+        return render(req,'upcoming.html',context)
+    else:
+        allproducts=Project.objects.all()
+        print(allproducts)
+        context={'allproducts':allproducts}
+        return render(req,'upcoming.html',context)
+
+def residential(req):
+    if req.method=="GET":
+        allproducts=Upcoming.objects.all()
+        # allproducts=Product.productmanager.electronics_list()
+        allproducts=Upcoming.objects.filter(type_of_project__exact="Residential")
+        print(allproducts)
+        context={'allproducts':allproducts}
+        return render(req,'upcoming.html',context)
+    else:
+        allproducts=Upcoming.objects.all()
+        print(allproducts)
+        context={'allproducts':allproducts}
+        return render(req,'upcoming.html',context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -167,9 +387,9 @@ def signup(req):
         return render(req,"signup.html")
     else:
         print(req.method)
-        uname=req.POST["uname"]
-        upass=req.POST["upass"]
-        ucpass=req.POST["ucpass"]
+        uname=req.POST.get("uname")
+        upass=req.POST.get("upass")
+        ucpass=req.POST.get("ucpass")
         print(uname,upass,ucpass)
         
         try:
@@ -192,7 +412,8 @@ def signup(req):
             return render(req,"signup.html",context)
         else:
             try:
-                userdata=User.objects.create(Username=uname,password=upass)
+                userdata=User.objects.create(username=uname,password=upass)
+                userdata.set_password(upass)
                 userdata.save()
                 print(User.objects.all())
                 return redirect("signin")
@@ -204,13 +425,13 @@ def signup(req):
         
 def signin(req):
     if req.method=="POST":
-        uname=req.POST["uname"]
-        upass=req.POST["upass"]
+        uname=req.POST.get("uname")
+        upass=req.POST.get("upass")
         context={}
         print(uname,upass)
         if uname==""or upass=="":
             context["error"]="All fields are required"
-            return render(req,"signin.html",context)
+            return render(req,"{% url 'signin' %}",context)
         else:
             userdata=authenticate(username=uname,password=upass)
             if userdata is not None:
@@ -224,7 +445,7 @@ def signin(req):
 
 def userlogout(req):
     logout(req)
-    return redirect("index.html")
+    return redirect("/")
 
 def request_password_reset(req):
     if req.method=="GET":

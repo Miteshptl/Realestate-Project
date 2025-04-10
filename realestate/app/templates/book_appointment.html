@@ -3,8 +3,6 @@
 
 <body>
   {% block body %} 
-
-
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +20,6 @@
         .form-container {
             width: 60%;
             margin: 50px auto;
-            background-color: #222;
             padding: 30px;
             border-radius: 8px;
         }
@@ -40,7 +37,6 @@
             margin: 10px 0;
             border: 1px solid gold;
             border-radius: 4px;
-            background-color: #333;
             color: white;
         }
         input[type="submit"] {
@@ -63,7 +59,7 @@
         <form method="post">
             {% csrf_token %}
             
-            <!-- Service Details (You can pre-fill these in a hidden field or pull from a database if needed) -->
+            <!-- Service Details -->
             <label for="service_name">Consultation Service</label>
             <input type="text" name="service_name" value="Consultation Service" required readonly>
             
@@ -71,11 +67,11 @@
             <textarea name="service_description" rows="3" readonly>This is a detailed description of the consultation service.</textarea>
             
             <label for="service_fee">Fee</label>
-            <input type="text" name="service_fee" value="100.00" required readonly>
+            <input type="text" name="service_fee" value="500.00" required readonly>
             
             <!-- User Information -->
             <label for="phone">Phone</label>
-            <input type="text" name="phone" required>
+            <input type="number" maxlength="10" max="9999999999" min="0000000001" name="phone" required>
             
             <label for="email">Email</label>
             <input type="email" name="email" required>

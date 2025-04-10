@@ -12,14 +12,15 @@ urlpatterns=[
     path('book_appintment/', views.book_appointment, name='book_appointment'),
     path('success/', views.success, name='success'),
     path('appointments/', views.user_appointments, name='appointments'),
-
+    path('residential/',views.residential,name='residential'),
+    path('commercial/', views.commercial, name='commercial'),
 
 
 
 
     path("signin/", views.signin, name="signin"),
     path("signup/", views.signup, name="signup"),
-    path("userlogout/", views.logout, name="logout"),
+    path("userlogout/", views.userlogout, name="userlogout"),
     path("request_password_reset/", views.request_password_reset, name="request_password_reset"),
     path("reset_password/", views.reset_password, name="reset_password"),
 ]

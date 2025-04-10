@@ -1,5 +1,8 @@
 {% extends 'base.html' %} {% load static %}
-<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+<title>{% block title %}LUXEHOME | Appointments{% endblock %}</title>
+<body>
+    {% block body %} 
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,7 +20,7 @@
         .appointments-container {
             width: 80%;
             margin: 50px auto;
-            background-color: #222;
+            background-color: #000;
             padding: 30px;
             border-radius: 8px;
         }
@@ -26,7 +29,7 @@
             color: gold;
         }
         .appointment {
-            background-color: #444;
+            background-color: #000;
             padding: 15px;
             margin: 10px 0;
             border-radius: 4px;
@@ -34,13 +37,13 @@
         }
     </style>
 
-<body>
-    {% block body %} 
+
 
     <header>
         <h1>Your Appointments</h1>
     </header>
-
+<section>
+    <div class="container">
     <div class="appointments-container">
         <h2>Upcoming Appointments</h2>
         {% if appointments %}
@@ -52,10 +55,15 @@
                     <p><strong>Message:</strong> {{ appointment.message }}</p>
                 </div>
             {% endfor %}
+            <p>If you wish to reschedule your appointment, please <a href="mailto:mrp93911@gmail.com">contact us </a></p>
         {% else %}
+            
             <p>You have no upcoming appointments.</p>
+
         {% endif %}
     </div>
+</div>
+</section>
     
     {% endblock %}
 </body>
