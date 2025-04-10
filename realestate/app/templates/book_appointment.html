@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% load static %}
-<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+{% block title %}LUXEHOME | Book Appointment{% endblock %}
 
 <body>
   {% block body %} 
@@ -71,7 +71,7 @@
             
             <!-- User Information -->
             <label for="phone">Phone</label>
-            <input type="number" maxlength="10" max="9999999999" min="0000000001" name="phone" required>
+            <input type="number" maxlength="10" max="9999999999" min="1000000000" name="phone" required>
             
             <label for="email">Email</label>
             <input type="email" name="email" required>
@@ -90,10 +90,78 @@
                 {% endfor %}
             </select>
             
-            <input type="submit" value="Book Appointment">
+            <button type="button" class="btn btn-warning" id="rzp-button1">Book Appointment</button>
         </form>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+    var options = {
+        "key": "rzp_test_wH0ggQnd7iT3nB", // Enter the Key ID generated from the Dashboard
+        "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "LUXEHOMES",
+        "description": "Consultaion Service",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{data.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+    var form = $('form').serialize(); // Serialize all form data
 
+    $.ajax({
+        type: 'POST',
+        url: '/confirm_appointment/',  // This should match your Django URL
+        data: form,
+        success: function (data) {
+            if(data.status === 'success'){
+                window.location.href = window.location.origin + '/success';
+            } else {
+                alert("Something went wrong while booking appointment.");
+            }
+        },
+        error: function(){
+            alert("Failed to communicate with server.");
+        }
+    });
+},
+
+        "prefill": {
+            "name": "LUXEHOMES",
+            "email": "mrp93911@gmail.com",
+            "contact": "9391194085"
+        },
+        "notes": {
+            "address": "Thakur Village,  Kandivali (East), Mumbai - 400101",
+        },
+        "theme": {
+            "color": "#000000"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e){
+    e.preventDefault();
+
+    // Check if form fields are filled
+    let phone = $('input[name="phone"]').val();
+    let email = $('input[name="email"]').val();
+    let appointment_date = $('input[name="appointment_date"]').val();
+    let time_slot = $('select[name="time_slot"]').val();
+
+    if(phone === "" || email === "" || appointment_date === "" || time_slot === ""){
+        alert("Please fill all required fields before proceeding to payment.");
+        return false;
+    }
+
+    // If all good - open Razorpay popup
+    rzp1.open();
+}
+    rzp1.on('payment.failed', function (response){
+            alert("Transaction cancelled. Try Again");
+            window.location.href=window.location.origin+'/book_appointment'
+            
+    });
+
+    </script>
+    
     {% endblock %}
 </body>

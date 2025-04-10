@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+# Project Model 
+
 class Project(models.Model):
     project_id = models.PositiveIntegerField(primary_key=True)
     type_choices = (("Residential", "Residential"), ("Commercial", "Commercial"))
@@ -29,6 +31,7 @@ class ProjectImage(models.Model):
     def __str__(self):
         return f"Image for {self.project.name_of_property}"
 
+# Upcoming Project Model
 
 class Upcoming(models.Model):
     upcoming_project_id = models.PositiveIntegerField(primary_key=True)
@@ -57,16 +60,30 @@ class UpcomingImage(models.Model):
         return f"Image for {self.upcoming_project.name_of_project}"
 
 
-# Model to represent a consultation appointment with time slots
+# Appointment Model
 class Appointment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  
     service_name = models.CharField(max_length=100)  
     service_description = models.TextField()  
     service_fee = models.DecimalField(max_digits=8, decimal_places=2)  
     date = models.DateTimeField()  
-    phone = models.CharField(max_length=15) 
+    phone = models.CharField(max_length=10) 
     email = models.EmailField()  
     message = models.TextField()
 
     def __str__(self):
         return f"{self.service_name} appointment with {self.user.username} on {self.date}"
+
+
+#  Contact Model    
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=10)
+    email = models.EmailField()
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"

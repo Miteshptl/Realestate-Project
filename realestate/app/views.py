@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponse,  get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import Project, Upcoming, ProjectImage, UpcomingImage, Appointment
+from .models import Project, Upcoming, ProjectImage, UpcomingImage, Appointment, ContactMessage
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 # Create your views here.
 def index(req):
@@ -17,8 +18,26 @@ def index(req):
 def about(req):
     return render(req,"about.html")
 
-def contact(req):
-    return render(req,"contact.html")
+def contact(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone= request.POST.get('phone')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        if name and email and subject and message:
+            ContactMessage.objects.create(
+                name=name,
+                phone=phone,
+                email=email,
+                subject=subject,
+                message=message
+            )
+            return render(request, 'contact/thank_you.html')
+
+    return render(request, 'contact.html')
+
 
 
 
@@ -117,19 +136,46 @@ def success(request):
     appointment = None
     if appointment_id:
         appointment = Appointment.objects.filter(id=appointment_id).first()
+    return render(request, 'book_success.html', {'appointment': appointment})
 
-    return render(request, 'book_uccess.html', {'appointment': appointment})
+
+
+@csrf_exempt
+def confirm_appointment(request):
+    if request.method == 'POST':
+        service_name = request.POST.get('service_name')
+        service_description = request.POST.get('service_description')
+        service_fee = request.POST.get('service_fee')
+        appointment_date = request.POST.get('appointment_date')
+        time_slot = request.POST.get('time_slot')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        message = request.POST.get('message', '')
+
+        appointment_datetime = datetime.strptime(f"{appointment_date} {time_slot}", '%Y-%m-%d %I:%M %p')
+
+        appointment = Appointment.objects.create(
+            user=request.user,
+            service_name=service_name,
+            service_description=service_description,
+            service_fee=service_fee,
+            date=appointment_datetime,
+            phone=phone,
+            email=email,
+            message=message,
+        )
+
+        request.session['appointment_id'] = appointment.id
+        return JsonResponse({'status': 'success'})
+    
+
+
+
 
 
 def user_appointments(req):
     appointments = Appointment.objects.filter(user=req.user) 
     return render(req, 'Appointments.html', {'appointments': appointments})
-
-
-
-
-
-
 
 
 
@@ -447,6 +493,23 @@ def userlogout(req):
     logout(req)
     return redirect("/")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def request_password_reset(req):
     if req.method=="GET":
         return render(req,"request_password_reset.html")
@@ -461,14 +524,14 @@ def request_password_reset(req):
             return render(req,"request_password_reset.html",context)
 
 def reset_password(req,uname):
-    userdata=User.objects.get(username=uname)
+    userdata=User.objects.get(uname=uname)
     if req.method=="GET":
         return render(req,"reset_password.html",{"uname":uname})
     else:
         upass=req.POST.get("upass")
         ucpass=req.POST.get("ucpass")
         context={}
-        userdata=User.objects.get(username=uname)
+        userdata=User.objects.get(uname=uname)
         try:
             if uname=="" or upass=="" or ucpass=="":
                 context["error"]="All fields are required"
