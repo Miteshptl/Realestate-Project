@@ -15,19 +15,19 @@
             {% endif %}
         <form action="{% url 'signup' %}" method="POST">
             {% csrf_token %}
-            <!-- Username Field -->
+
             <div class="form-group">
                 <label for="text">Username</label>
                 <input type="text" class="form-control" id="uname" name="uname" placeholder="Enter Username" required>
             </div>
-
-            <!-- Password Field -->
+            <div class="form-group">
+                <label for="uemail">Email</label>
+                <input type="email" class="form-control" id="uemail" name="uemail" placeholder="Enter Email" required>
+            </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="upass" name="upass" placeholder="Enter your password" required>
             </div>
-
-            <!-- Confirm Password Field -->
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" class="form-control" id="ucpass" name="ucpass" placeholder="Confirm your password" required>

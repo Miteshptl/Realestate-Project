@@ -10,6 +10,8 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from django.shortcuts import render
+import random
+from django.contrib import messages
 
 # Create your views here.
 def index(req):
@@ -489,47 +491,106 @@ def validate_password(password):
 # signup view to be created
 #  signin view to be created 
 
+
+
+
+
+
+
+
+
+# def signup(req):
+#     print(req.method)
+#     context={}
+#     if req.method=="GET":
+#         return render(req,"signup.html")
+#     else:
+#         print(req.method)
+#         uname=req.POST.get("uname")
+#         upass=req.POST.get("upass")
+#         ucpass=req.POST.get("ucpass")
+#         print(uname,upass,ucpass)
+        
+#         try:
+#             validate_password(upass)
+#         except ValidationError as e:
+#             context["error"]=str(e)
+#             return render(req,"signup.html",context)
+        
+#         if uname=="" or upass=="" or ucpass=="":
+#             context["error"]="All fields are required"
+#             return render(req,"signup.html",context)
+#         elif upass!=ucpass:
+#             context["error"]="Passwords do not match"
+#             return render(req,"signup.html",context)
+#         elif uname.isdigit():
+#             context["error"]="Enter Valid Full Name"
+#             return render(req,"signup.html",context)
+#         elif upass == uname:
+#             context["error"]="Password cannot be same as Username"
+#             return render(req,"signup.html",context)
+#         else:
+#             try:
+#                 userdata=User.objects.create(username=uname,password=upass)
+#                 userdata.set_password(upass)
+#                 userdata.save()
+#                 print(User.objects.all())
+#                 return redirect("signin")
+#             except:
+#                 print("User already exists")
+#                 context["error"]="Username already exists"
+#                 return render(req,"signup.html",context)
+
+
+
+
+
+
+
+
+
 def signup(req):
     print(req.method)
-    context={}
-    if req.method=="GET":
-        return render(req,"signup.html")
+    context = {}
+
+    if req.method == "GET":
+        return render(req, "signup.html")
+
     else:
-        print(req.method)
-        uname=req.POST.get("uname")
-        upass=req.POST.get("upass")
-        ucpass=req.POST.get("ucpass")
-        print(uname,upass,ucpass)
-        
+        uname = req.POST.get("uname")
+        uemail = req.POST.get("uemail")
+        upass = req.POST.get("upass")
+        ucpass = req.POST.get("ucpass")
+
         try:
             validate_password(upass)
         except ValidationError as e:
-            context["error"]=str(e)
-            return render(req,"signup.html",context)
-        
-        if uname=="" or upass=="" or ucpass=="":
-            context["error"]="All fields are required"
-            return render(req,"signup.html",context)
-        elif upass!=ucpass:
-            context["error"]="Passwords do not match"
-            return render(req,"signup.html",context)
+            context["error"] = str(e)
+            return render(req, "signup.html", context)
+
+        if not uname or not uemail or not upass or not ucpass:
+            context["error"] = "All fields are required"
+            return render(req, "signup.html", context)
+        elif upass != ucpass:
+            context["error"] = "Passwords do not match"
+            return render(req, "signup.html", context)
         elif uname.isdigit():
-            context["error"]="Enter Valid Full Name"
-            return render(req,"signup.html",context)
+            context["error"] = "Enter a valid username"
+            return render(req, "signup.html", context)
         elif upass == uname:
-            context["error"]="Password cannot be same as Username"
-            return render(req,"signup.html",context)
+            context["error"] = "Password cannot be the same as username"
+            return render(req, "signup.html", context)
         else:
             try:
-                userdata=User.objects.create(username=uname,password=upass)
+                userdata = User.objects.create(username=uname, email=uemail)
                 userdata.set_password(upass)
                 userdata.save()
-                print(User.objects.all())
                 return redirect("signin")
             except:
-                print("User already exists")
-                context["error"]="Username already exists"
-                return render(req,"signup.html",context)
+                context["error"] = "Username already exists"
+                return render(req, "signup.html", context)
+
+
 
         
 def signin(req):
@@ -561,53 +622,162 @@ def userlogout(req):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 def request_password_reset(req):
-    if req.method=="GET":
-        return render(req,"request_password_reset.html")
-    else:
-        uname=req.POST.get("uname")
-        context={}
-        try:
-            userdata=User.objects.get(username=uname)
-            return redirect("reset_password",uname=userdata.username)
-        except User.DoesNotExist:
-            context["error"]="User does not exist"
-            return render(req,"request_password_reset.html",context)
+    if req.method == "POST":
+        uemail = req.POST.get("uemail")
 
-def reset_password(req,uname):
-    userdata=User.objects.get(uname=uname)
-    if req.method=="GET":
-        return render(req,"reset_password.html",{"uname":uname})
-    else:
-        upass=req.POST.get("upass")
-        ucpass=req.POST.get("ucpass")
-        context={}
-        userdata=User.objects.get(uname=uname)
         try:
-            if uname=="" or upass=="" or ucpass=="":
-                context["error"]="All fields are required"
-                return render(req,"reset_password.html",context)
-            elif upass!=ucpass:
-                context["error"]="Passwords do not match"
-                return render(req,"reset_password.html",context)
-            else:
-                validate_password(upass)
-                userdata.set_password(upass)
-                userdata.save()
-                return redirect("signin")
-            
-        except ValidationError as e:
-            context["error"]=str(e)
-            return render(req,"reset_password.html",context)
+            user = User.objects.get(email=uemail)
+            print("User found:", user)
+
+            # Generate OTP and store in session
+            userotp = random.randint(100000, 999999)
+            req.session["otp"] = userotp
+            req.session["uemail"] = uemail  # Save email to session
+
+            # Send OTP via email
+            subject = "LUXEHOMES - OTP for Reset Password"
+            message = f"""
+            Hello {user.username},
+
+            Your OTP to reset your password is: {userotp}
+
+            If you didn’t request this, please ignore this email.
+
+            Thank you,
+            LUXEHOMES
+            """
+            emailfrom = settings.EMAIL_HOST_USER
+            receiver = [user.email]
+            send_mail(subject, message, emailfrom, receiver)
+
+            return redirect("reset_password")  # Go to next step
+
+        except User.DoesNotExist:
+            messages.error(req, "No account found with this email.")
+            return render(req, "request_password_reset.html")
+
+    return render(req, "request_password_reset.html")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def request_password_reset(req):
+#     if req.method == "POST":
+#         user = req.POST.get[email=umail]
+#         try:
+#             user = User.objects.get(email=uemail)
+#             print(user.email, user)
+
+#             userotp = random.randint(1111, 9999)
+#             req.session["otp"] = userotp  # store otp into session
+
+#             subject = "LUXEHOMES - OTP for Reset Password"
+#             msg = f"Hello {user}\n Your OTP to reset password is:{userotp}\n Thank You for using our services."
+#             emailfrom = settings.EMAIL_HOST_USER
+#             receiver = [user.email]
+#             send_mail(subject, msg, emailfrom, receiver)
+
+#             return redirect("reset_password", uemail=user.email)
+
+#         except User.DoesNotExist:
+#             messages.error(req, "No account found with this email id.")
+#             return render(req, "request_password_reset.html")
+#     else:
+#         return render(req, "request_password_reset.html")
+
+
+
+
+
+
+
+
+# def reset_password(req):
+#     user = User.objects.get(email)
+#     print(user)
+#     if req.method == "POST":
+#         otp_entered = req.POST["otp"]
+#         upass = req.POST["upass"]
+#         ucpass = req.POST["ucpass"]
+#         userotp = req.session.get("otp")
+#         print(userotp, type(userotp))
+#         print(otp_entered, type(otp_entered), upass, ucpass)
+
+#         if int(otp_entered) != int(userotp):
+#             messages.error(req, "OTP does not match! Try Again.")
+#             return render(req, "reset_password.html")
+
+#         elif upass != ucpass:
+#             messages.error(req, "Confirm password and password do not match.")
+#             return render(req, "reset_password.html")
+
+#         else:
+#             try:
+#                 validate_password(upass)
+#                 user.set_password(upass)
+#                 user.save()
+#                 return redirect("signin")
+#             except ValidationError as e:
+#                 messages.error(req, str(e))
+#                 return render(req, "reset_password.html")
+#     else:
+#         return render(req, "reset_password.html")
+
+
+
+
+def reset_password(req):
+    # Check if the email is in session (passed from the email reset request form)
+    uemail = req.session.get("uemail")
+    
+    if not uemail:
+        # If no email is in session, redirect to the reset form
+        return redirect('request_reset_password')
+
+    if req.method == "POST":
+        # Get the new password from the form
+        new_password = req.POST.get("upass")
+        confirm_password = req.POST.get("ucpass")
+
+        if new_password == confirm_password:
+            try:
+                # Look for the user by email
+                user = User.objects.get(email=uemail)
+                
+                # Set the new password
+                user.set_password(new_password)
+                user.save()
+
+                # Clear the session data to avoid accidental reuse
+                req.session.pop("uemail", None)
+
+                messages.success(req, "Password reset successfully.")
+                return redirect('login')  # Redirect to login page after reset
+
+            except User.DoesNotExist:
+                messages.error(req, "No user found with that email address.")
+        else:
+            messages.error(req, "Passwords do not match.")
+
+    return render(req, 'reset_password.html', {
+        'email': uemail  # Pass the email to the template for user context
+    })
