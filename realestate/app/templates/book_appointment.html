@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000;
+            background-color: #000000;
             color: #fff;
             margin: 0;
             padding: 0;
@@ -71,7 +71,8 @@
             
             <!-- User Information -->
             <label for="phone">Phone</label>
-            <input type="number" maxlength="10" max="9999999999" min="1000000000" name="phone" required>
+            <input type="number" name="phone" required maxlength="10" minlength="10" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10)">
+
             
             <label for="email">Email</label>
             <input type="email" name="email" required>
@@ -90,7 +91,7 @@
                 {% endfor %}
             </select>
             
-            <button type="button" class="btn btn-warning" id="rzp-button1">Book Appointment</button>
+            <button type="submit" class="btn btn-warning" id="rzp-button1">Book Appointment</button>
         </form>
     </div>
 
@@ -152,6 +153,19 @@
         return false;
     }
 
+    var phonePattern = /^[0-9]{10}$/;
+    if(!phonePattern.test(phone)){
+        alert("Phone number must be exactly 10 digits.");
+        return false;
+    }
+
+    // Check Email Validation
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailPattern.test(email)){
+        alert("Please enter a valid email address.");
+        return false;
+    }
+    
     // If all good - open Razorpay popup
     rzp1.open();
 }
@@ -162,6 +176,6 @@
     });
 
     </script>
-    
+
     {% endblock %}
 </body>

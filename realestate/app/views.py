@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
+from django.shortcuts import render
 
 # Create your views here.
 def index(req):
@@ -34,10 +37,31 @@ def contact(request):
                 subject=subject,
                 message=message
             )
-            return render(request, 'contact/thank_you.html')
+            send_mail(
+                subject=f"New Contact Form Submission: {subject}",
+                message=f"From: {name} <{email}>\n\n{message}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=['mrp93911@gmail.com'],  
+                fail_silently=False,
+            )
+
+            send_mail(
+                subject="Thanks for contacting us!",
+                message=f"Hi {name},\n\nThanks for reaching out! We’ve received your message and will get back to you soon.\n\n- LUXEHOMES",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False,
+            )
+
+            return render(request, 'thank_you.html')
+            
 
     return render(request, 'contact.html')
 
+
+
+def thank_you(req):
+    return render(req, 'thank_you.html')
 
 
 
@@ -82,9 +106,7 @@ def generate_time_slots():
 
 
 
-from django.shortcuts import render
-from datetime import datetime
-from .models import Appointment  # Assuming you have an Appointment model
+
 
 def book_appointment(req):
     time_slots = generate_time_slots()
@@ -180,6 +202,53 @@ def user_appointments(req):
 
 
 
+
+@login_required
+@csrf_exempt
+def confirm_appointment(request):
+    if request.method == 'POST':
+        form_data = request.POST  # or from session if you're storing it there
+
+        appointment_datetime = datetime.strptime(
+            f"{form_data['appointment_date']} {form_data['time_slot']}",
+            '%Y-%m-%d %I:%M %p'
+        )
+
+        Appointment.objects.create(
+            user=request.user,
+            service_name=form_data['service_name'],
+            service_description=form_data['service_description'],
+            service_fee=form_data['service_fee'],
+            date=appointment_datetime,
+            phone=form_data['phone'],
+            email=form_data['email'],
+            message=form_data['message'],
+        )
+
+        # Send Email Confirmation
+        send_mail(
+            subject='Appointment Confirmation - LUXEHOMES',
+            message=f"""Dear {request.user.username},
+
+            Your appointment for "{form_data['service_name']}" has been successfully booked.
+
+            📅 Date: {form_data['appointment_date']}
+            ⏰ Time: {form_data['time_slot']}
+            📞 Phone: {form_data['phone']}
+            📧 Email: {form_data['email']}
+
+            Thank you for choosing LuxeHomes!
+            We look forward to seeing you.
+
+            Regards,
+            LUXEHOMES Team
+            """,
+            from_email='your_email@gmail.com',
+            recipient_list=[form_data['email']],
+            fail_silently=False,
+        )
+
+        return JsonResponse({'status': 'success'})
 
 
 
@@ -404,12 +473,6 @@ def residential(req):
 
 
 
-
-# def upcoming(req):
-#     return render(req,"upcoming.html")
-
-# def registered(req):
-#     return render(req,"registered.html")
 
 def validate_password(password):
     if len(password)<8:
