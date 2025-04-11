@@ -1,8 +1,109 @@
 {% extends 'base.html' %} {% load static %}
-<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+{% block title %}LUXEHOME | Properties{% endblock %}
 <body>
   {% block body %} 
 
+  <style>
+    .r-1 {
+        padding: 10px;
+        text-align: center;
+    }
+    .r-1 img {
+        width: 100%;
+        height: auto;
+    }
+    .r-1 h1 {
+        font-size: 2em;
+        margin-top: 20px;
+    }
+    .third-section {
+        padding: 10px;
+    }
+    .search-bar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .filters {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+    .filter {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .search-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .col-md-2 {
+        flex: 1 1 20%;
+        margin: 10px;
+    }
+    .card {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+    .card-body {
+        padding: 10px;
+    }
+    .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .card-text {
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+    
+    .r-3 {
+        padding: 10px;
+    }
+    .r-3 section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .r-3 .col-md-2 {
+        flex: 1 1 20%;
+        margin: 10px;
+    }
+    .r-3 .card {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .r-3 .card img {
+        width: 100%;
+        height: auto;
+    }
+    .r-3 .card-body {
+        padding: 10px;
+    }
+    .r-3 .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+  </style>
     <!-- SECTION-1 STARTS HERE -->
     <div class="r-1">
         <section>
@@ -12,19 +113,50 @@
     </div>
     <!-- SECTION-1 ENDS HERE -->
      <!-- SECTION-2 STARTS HERE -->
-    <div class="r-2">
-        <div class="container">
-            <h1>Find Your Dream Home</h1>
-          </div>
-          <div class="container">
-          <section>
-          <form class="d-flex search-form  mx-3" method="get" action="/searchproduct/">
-            <input type="search" name="q" class="form-control search-input mx-2" placeholder="Search for Dream Home">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
-          </form>
-          </section>
-          </div>
-    </div>
+     <div class="third-section">
+ 
+        <div class="row">
+          <div class="col">
+            <div class="search-bar">
+              <h1>Find Your Dream Property</h1>
+              <div class="filters">
+                <select id="location" class="filter">
+                    <option value="">Select Location</option>
+                    <option value="mumbai">Mumbai</option>
+                    <option value="delhi">Delhi</option>
+                    <option value="bangalore">Bangalore</option>
+                    <option value="pune">Pune</option>
+                  </select>
+                  
+                      <select id="property-type" class="filter">
+                          <option value="">Property Type</option>
+                          <option value="residential">Residential</option>
+                          <option value="commercial">Commercial</option>
+                      </select>
+                      <input type="number" id="min-price" placeholder="Min Price" class="filter" min="0">
+                      <input type="number" id="max-price" placeholder="Max Price" class="filter" min="0">
+                      <select id="bedrooms" class="filter">
+                          <option value="">Bedrooms</option>
+                          <option value="1">1+</option>
+                          <option value="2">2+</option>
+                          <option value="3">3+</option>
+                          <option value="4">4+</option>
+                      </select>
+                      <select id="negotiable" class="filter">
+                        <option value="">Negotiable</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                      
+                  </div>
+                  <div class="search-actions">
+                      <button class="btn btn-success">Search</button>
+                      <button class="btn btn-danger" onclick="resetForm()">Reset</button>
+                  </div>
+                  </div>
+              </div>
+          </div>  
+        </div>
     <!-- SECTION-2 ENDS HERE -->
      <!-- SECTION-3 STARTS HERE -->
     
@@ -32,16 +164,24 @@
         <section>
             <div class="row">
                 {% for project in projects %}
-                    <div class="col-md-2">
-                        <div class="card" style="width: 18rem;">
-                                <img src="{% static 'images/default_image.png' %}" class="card-img-top" alt="Default Image">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ project.name_of_property }}</h5>
-                                <p class="card-text">Area: {{ project.area_of_property_located }}</p>
-                                <a href="#" class="btn btn-primary">Know More</a>
-                            </div>
-                        </div>
+                <div class="card" style="width: 18rem;">
+                    {% if project.display_image %}
+                      <img src="{{ project.display_image.url }}" class="card-img-top" alt="{{ project.name_of_property }}">
+                    {% else %}
+                      <img src="{% static 'images/default_image.png' %}" class="card-img-top" alt="{{ project.name_of_property }}">
+                    {% endif %}
+                    <div class="card-body"
+                         data-location="{{ project.area_of_property_located|lower }}"
+                         data-type="{{ project.type_of_project|lower }}"
+                         data-price="{{ project.price }}"
+                         data-bhk="{{ project.no_of_BHK }}"
+                         data-negotiable="{{ project.negotiable|lower }}">
+                      <h5 class="card-title">{{ project.name_of_property }}</h5>
+                      <p class="card-text">Area: {{ project.area_of_property_located }}</p>
+                      <a href="/project/{{ project.project_id }}" class="btn btn-primary">Know More</a>
                     </div>
+                  </div>
+                  
                 {% endfor %}
             </div>
         </section>
@@ -86,5 +226,55 @@
         
     </div>
     <!-- SECTION-10 ENDS HERE -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          document.querySelector(".btn-success").addEventListener("click", function () {
+            const location = document.getElementById("location").value.toLowerCase();
+            const propertyType = document.getElementById("property-type").value.toLowerCase();
+            const minPrice = parseFloat(document.getElementById("min-price").value);
+            const maxPrice = parseFloat(document.getElementById("max-price").value);
+            const bedrooms = parseInt(document.getElementById("bedrooms").value);
+            
+
+      
+            const cards = document.querySelectorAll(".card");
+      
+            cards.forEach((card) => {
+              const body = card.querySelector(".card-body");
+              const cardData = body.dataset;
+      
+              const area = cardData.location;
+              const type = cardData.type;
+              const price = parseFloat(cardData.price || 0);
+              const bhkConfig = cardData.bhk;
+              const negotiableVal = cardData.negotiable;
+      
+              let matches = true;
+      
+              if (location && !area.includes(location)) matches = false;
+              if (propertyType && !type.includes(propertyType)) matches = false;
+              if (!isNaN(minPrice) && price < minPrice) matches = false;
+              if (!isNaN(maxPrice) && price > maxPrice) matches = false;
+              if (!isNaN(bedrooms)) {
+                const bhkMatch = bhkConfig.match(/(\d+)/);
+                const bhk = bhkMatch ? parseInt(bhkMatch[1]) : 0;
+                if (bhk < bedrooms) matches = false;
+              }
+              if (negotiable && negotiable !== negotiableVal.toLowerCase()) matches = false;
+      
+              card.style.display = matches ? "block" : "none";
+            });
+          });
+        });
+        function resetForm() {
+              document.getElementById("location").value = '';
+              document.getElementById("property-type").value = '';
+              document.getElementById("min-price").value = '';
+              document.getElementById("max-price").value = '';
+              document.getElementById("bedrooms").value = '';
+        }
+      </script>
+
     {% endblock %}
   </body>

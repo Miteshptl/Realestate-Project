@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% load static %}
-<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
+{% block title %}LUXEHOME | Index{% endblock %}
 <body>
   {% block body %} 
      <div class="main-body">
@@ -21,21 +21,7 @@
       </div>
 
     <!-- SECTION-2 ENDS HERE -->
-    <!-- SECTION-3 STARTS HERE -->
-    <div class="third-section">
-      <div class="container">
-        <h1>Find Your Dream Home</h1>
-      </div>
-      <div class="container">
-      <section>
-      <form class="d-flex search-form  mx-3" method="get" action="/searchproduct/">
-        <input type="search" name="q" class="form-control search-input mx-2" placeholder="Search for Dream Home">
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-      </form>
-      </section>
-      </div>
-      </div>
-    <!-- SECTION-3 ENDS HERE -->
+
       <!-- Partision of Expertise Range and Service-->
        <div class="container">
       <div class="row">

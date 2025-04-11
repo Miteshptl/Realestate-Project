@@ -1,92 +1,273 @@
 {% extends 'base.html' %} {% load static %}
-<title>{% block title %}LUXEHOME|Index{% endblock %}</title>
-<body>
+{% block title %} LUXEHOME | Upcoming Properties {% endblock %}
+<body>  
   {% block body %} 
+
+  <style>
+    .r-1 {
+        padding: 10px;
+        text-align: center;
+    }
+    .r-1 img {
+        width: 100%;
+        height: auto;
+    }
+    .r-1 h1 {
+        font-size: 2em;
+        margin-top: 20px;
+    }
+    .third-section {
+        padding: 10px;
+    }
+    .search-bar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .filters {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+    .filter {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+    }
+    .search-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .col-md-2 {
+        flex: 1 1 20%;
+        margin: 10px;
+    }
+    .card {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .card img {
+        width: 100%;
+        height: auto;
+    }
+    .card-body {
+        padding: 10px;
+    }
+    .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .card-text {
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+    
+    .r-3 {
+        padding: 10px;
+    }
+    .r-3 section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .r-3 .col-md-2 {
+        flex: 1 1 20%;
+        margin: 10px;
+    }
+    .r-3 .card {
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .r-3 .card img {
+        width: 100%;
+        height: auto;
+    }
+    .r-3 .card-body {
+        padding: 10px;
+    }
+    .r-3 .card-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+  </style>
 
     <!-- SECTION-1 STARTS HERE -->
     <div class="up-1">
-
-            <img src="..." alt="...">
-            <h1>Discover Our Exciting Upcoming Projects – Where Innovation Meets Opportunity.</h1>
+      <div class="badge text-wrap">
+            <img src="../static/images/bg_about.png" alt="...">
+            
+              <h1>Discover Our Exciting Upcoming Projects – Where Innovation Meets Opportunity.</h1>
+              
+            </div>
+            
 
     </div>
     <!-- SECTION-1 ENDS HERE -->
      <!-- SECTION-2 STARTS HERE -->
     <div class="up-2">
-        <div class="container">
-            <h1>Find Your Dream Home</h1>
-            
-          <div>
-          <section>
-          <form class="d-flex search-form  mx-3" method="get" action="/searchproduct/">
-            <input type="search" name="q" class="form-control search-input mx-2" placeholder="Search for Dream Home">
-            <button class="btn btn-outline-primary mx-2" type="submit">Search</button>
-          </form>
-          </section>
-          </div>
-          </div>
+
+        <div class="row">
+            <div class="col">
+              <div class="search-bar">
+                <h1>Find Your Dream Property</h1>
+                <div class="filters">
+                    <input type="text" id="location" placeholder="Enter location" class="filter">
+                        <select id="property-type" class="filter">
+                            <option value="">Property Type</option>
+                            <option value="residential">Residential</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                        <input type="number" id="min-price" placeholder="Min Price" class="filter" min="0">
+                        <input type="number" id="max-price" placeholder="Max Price" class="filter" min="0">
+                        <select id="bedrooms" class="filter">
+                            <option value="">Bedrooms</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+                    <div class="search-actions">
+                        <button class="btn btn-success">Search</button>
+                        <button class="btn btn-danger" onclick="resetForm()">Reset</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    
+
+
     </div>
     <!-- SECTION-2 ENDS HERE -->
-     <!-- SECTION-3 STARTS HERE -->
-     <div class="r-3">
+
+    
+    <section>
         <div class="container">
-        <section>
-            <div class="row">
-                    <div class="col-md-2">
-                        {% for x in upcoming_projects %}
-                        <div class="card" style="width: 18rem;">
-                                <img src="{% static 'images/default_image.png' %}" class="card-img-top" alt="Default Image">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ x.name_of_project }}</h5>
-                                <p class="card-text">Area: {{ x.area_of_project_located }}</p>
-                                <a href="/upcomingdetail/{{x.upcoming_project_id}}" class="btn btn-primary">Know More</a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-            </div>
-        </section>
+      <div class="row">
+          <div class="col-md-2">
+              {% for x in upcoming_projects %}
+              <div class="card" style="width: 18rem;">
+                {% if x.display_image %}
+                    <img src="{{ x.display_image.url }}" class="card-img-top" alt="{{ x.name_of_project }}">
+                {% else %}
+                    <img src="{% static 'images/default_image.png' %}" class="card-img-top" alt="{{ x.name_of_project }}">
+                {% endif %}
+
+                <div class="card-body"
+                     data-location="{{ x.area_of_project_located|lower }}"
+                     data-type="{{ x.type_of_project|lower }}"
+                     data-price="{{ x.total_area_of_project|default:'0'|floatformat }}"
+                     data-config="{{ x.configuration|lower }}">
+                  <h5 class="card-title">{{ x.name_of_project }}</h5>
+                  <p class="card-text">Area: {{ x.area_of_project_located }}</p>
+                  <a href="/upcomingdetail/{{ x.upcoming_project_id }}" class="btn btn-primary">Know More</a>
+                </div>
+              </div>
+              
+              {% endfor %}
+          </div>
+      </div>
         </div>
-    </div>
-    <!-- SECTION-3 ENDS HERE -->
-     <!-- SECTION-4 STARTS HERE -->
-    <div class="up-4">
-        <section>
-        
-        </section>
-    </div>
-    <!-- SECTION-4 ENDS HERE -->
-     <!-- SECTION-5 STARTS HERE -->
-    <div class="up-5">
-        <section>
-            
-        </section>
-    </div>
-    <!-- SECTION-5 ENDS HERE -->
-     <!-- SECTION-6 STARTS HERE -->
-    <div class="up-6">
-        
-    </div>
-    <!-- SECTION-6 ENDS HERE -->
-     <!-- SECTION-7 STARTS HERE -->
-    <div class="up-7">
-        
-    </div>
-    <!-- SECTION-7 ENDS HERE -->
-     <!-- SECTION-8 STARTS HERE -->
-    <div class="up-8">
-        
-    </div>
-    <!-- SECTION-8 ENDS HERE -->
-     <!-- SECTION-9 STARTS HERE -->
-    <div class="up-9">
-        
-    </div>
-    <!-- SECTION-9 ENDS HERE -->
-     <!-- SECTION-10 STARTS HERE -->
-    <div class="up-10">
-        
-    </div>
-    <!-- SECTION-10 ENDS HERE -->
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     {% endblock %}
+    <script>
+        document.querySelector(".btn-success").addEventListener("click", function () {
+          const location = document.getElementById("location").value.toLowerCase();
+          const type = document.getElementById("property-type").value.toLowerCase();
+          const minPrice = parseFloat(document.getElementById("min-price").value);
+          const maxPrice = parseFloat(document.getElementById("max-price").value);
+          const bedrooms = parseInt(document.getElementById("bedrooms").value);
+      
+          const cards = document.querySelectorAll(".card");
+      
+          cards.forEach(card => {
+            const body = card.querySelector(".card-body");
+            const cardLocation = body.dataset.location;
+            const cardType = body.dataset.type;
+            const cardPrice = parseFloat(body.dataset.price || 0);
+            const cardConfig = body.dataset.config;
+      
+            let matches = true;
+      
+            if (location && !cardLocation.includes(location)) matches = false;
+            if (type && !cardType.includes(type)) matches = false;
+            if (!isNaN(minPrice) && cardPrice < minPrice) matches = false;
+            if (!isNaN(maxPrice) && cardPrice > maxPrice) matches = false;
+            if (!isNaN(bedrooms)) {
+              const bhkMatch = cardConfig.match(/(\\d+)BHK/i);
+              const bhk = bhkMatch ? parseInt(bhkMatch[1]) : 0;
+              if (bhk < bedrooms) matches = false;
+            }
+      
+            card.style.display = matches ? "block" : "none";
+          });
+        });
+
+        function resetForm() {
+                document.getElementById("location").value = '';
+                document.getElementById("property-type").value = '';
+                document.getElementById("min-price").value = '';
+                document.getElementById("max-price").value = '';
+                document.getElementById("bedrooms").value = '';
+            }
+      </script>
   </body>
