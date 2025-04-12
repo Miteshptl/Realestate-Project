@@ -125,7 +125,11 @@
               <div class="search-bar">
                 <h1>Find Your Dream Property</h1>
                 <div class="filters">
-                    <input type="text" id="location" placeholder="Enter location" class="filter">
+                    <select id="location" class="filter">
+                        <option value="">Location</option>
+                        <option value="residential">Borivali East</option>
+                        <option value="commercial">Borivali West</option>
+                    </select>
                         <select id="property-type" class="filter">
                             <option value="">Property Type</option>
                             <option value="residential">Residential</option>
@@ -231,8 +235,8 @@
     {% endblock %}
     <script>
         document.querySelector(".btn-success").addEventListener("click", function () {
-          const location = document.getElementById("location").value.toLowerCase();
-          const type = document.getElementById("property-type").value.toLowerCase();
+          const location = document.getElementById("location").value;
+          const type = document.getElementById("property-type").value;
           const minPrice = parseFloat(document.getElementById("min-price").value);
           const maxPrice = parseFloat(document.getElementById("max-price").value);
           const bedrooms = parseInt(document.getElementById("bedrooms").value);

@@ -624,16 +624,16 @@ def userlogout(req):
 
 def request_password_reset(req):
     if req.method == "POST":
-        uemail = req.POST.get("uemail")
+        uname = req.POST.get("uname")
 
         try:
-            user = User.objects.get(email=uemail)
+            user = User.objects.get(username=uname)
             print("User found:", user)
 
             # Generate OTP and store in session
             userotp = random.randint(100000, 999999)
             req.session["otp"] = userotp
-            req.session["uemail"] = uemail  # Save email to session
+            req.session["uemail"] = user.email  # Save email to session
 
             # Send OTP via email
             subject = "LUXEHOMES - OTP for Reset Password"
@@ -654,93 +654,12 @@ def request_password_reset(req):
             return redirect("reset_password")  # Go to next step
 
         except User.DoesNotExist:
-            messages.error(req, "No account found with this email.")
             return render(req, "request_password_reset.html")
 
     return render(req, "request_password_reset.html")
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def request_password_reset(req):
-#     if req.method == "POST":
-#         user = req.POST.get[email=umail]
-#         try:
-#             user = User.objects.get(email=uemail)
-#             print(user.email, user)
-
-#             userotp = random.randint(1111, 9999)
-#             req.session["otp"] = userotp  # store otp into session
-
-#             subject = "LUXEHOMES - OTP for Reset Password"
-#             msg = f"Hello {user}\n Your OTP to reset password is:{userotp}\n Thank You for using our services."
-#             emailfrom = settings.EMAIL_HOST_USER
-#             receiver = [user.email]
-#             send_mail(subject, msg, emailfrom, receiver)
-
-#             return redirect("reset_password", uemail=user.email)
-
-#         except User.DoesNotExist:
-#             messages.error(req, "No account found with this email id.")
-#             return render(req, "request_password_reset.html")
-#     else:
-#         return render(req, "request_password_reset.html")
-
-
-
-
-
-
-
-
-# def reset_password(req):
-#     user = User.objects.get(email)
-#     print(user)
-#     if req.method == "POST":
-#         otp_entered = req.POST["otp"]
-#         upass = req.POST["upass"]
-#         ucpass = req.POST["ucpass"]
-#         userotp = req.session.get("otp")
-#         print(userotp, type(userotp))
-#         print(otp_entered, type(otp_entered), upass, ucpass)
-
-#         if int(otp_entered) != int(userotp):
-#             messages.error(req, "OTP does not match! Try Again.")
-#             return render(req, "reset_password.html")
-
-#         elif upass != ucpass:
-#             messages.error(req, "Confirm password and password do not match.")
-#             return render(req, "reset_password.html")
-
-#         else:
-#             try:
-#                 validate_password(upass)
-#                 user.set_password(upass)
-#                 user.save()
-#                 return redirect("signin")
-#             except ValidationError as e:
-#                 messages.error(req, str(e))
-#                 return render(req, "reset_password.html")
-#     else:
-#         return render(req, "reset_password.html")
 
 
 
