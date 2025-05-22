@@ -109,13 +109,6 @@ gunicorn
 whitenoise
 ```
 
-## 🖼️ Screenshots (Optional)
-
-> You can add `/screenshots/homepage.png`, `/screenshots/admin.png`, etc.  
-> Use Markdown to embed:  
-```md
-![Homepage](screenshots/homepage.png)
-```
 
 ## 🙌 Contributing
 
